@@ -37,6 +37,20 @@
     padding: 30px 0;
   }
 
+  .logo-igsm {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--blue);
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    padding: 12px 32px;
+    border-radius: 16px;
+    text-shadow: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    margin-bottom: 12px;
+  }
+
   .header h1 {
     font-size: 2.2rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -48,6 +62,59 @@
     opacity: 0.9;
     letter-spacing: 2px;
     text-transform: uppercase;
+  }
+
+  /* File input styling */
+  input[type="file"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--gray);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  input[type="file"]:hover {
+    border-color: var(--blue-light);
+  }
+
+  /* Prize list */
+  .prize-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .prize-item {
+    background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,215,0,0.04) 100%);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .prize-item .prize-rank {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--blue);
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .prize-item .prize-name {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--gold-dark);
+  }
+
+  .prize-item .prize-detail {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 4px;
   }
 
   /* Ticket card */
@@ -344,7 +411,7 @@
 
 <div class="container">
   <div class="header">
-    <div class="brand">IGSM</div>
+    <div class="logo-igsm">IGSM</div>
     <h1 class="float">🎉 ¡Lotería!</h1>
   </div>
 
@@ -395,23 +462,33 @@
         <div class="step-num">3</div>
         <div class="step-content">
           <h3>Captura tu reseña</h3>
-          <p>Toma una captura de pantalla (screenshot) de tu reseña publicada.</p>
+          <p>Toma una captura de pantalla (screenshot) de tu reseña publicada en Google.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-content">
-          <h3>Completa el formulario</h3>
-          <p>Sube tu captura y tus datos. ¡Ya estás participando!</p>
+          <h3>Sube tu captura y datos</h3>
+          <p>Adjunta la captura directamente desde tu móvil. ¡Ya estás participando!</p>
         </div>
       </div>
     </div>
 
     <!-- Prize -->
     <div class="prize-box">
-      <h3>🏆 Premio</h3>
-      <div class="prize-text">¡Sorpresa Especial!</div>
-      <div class="prize-hint">El premio será anunciado pronto. ¡No te lo pierdas!</div>
+      <h3>🏆 Premios</h3>
+      <div class="prize-list">
+        <div class="prize-item">
+          <div class="prize-rank">🥇 1º Premio</div>
+          <div class="prize-name">iPhone 14</div>
+          <div class="prize-detail">Reacondicionado · Como nuevo</div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-rank">🥈 2º Premio</div>
+          <div class="prize-name">Apple Watch SE 2</div>
+          <div class="prize-detail">Reacondicionado · Como nuevo</div>
+        </div>
+      </div>
     </div>
 
     <!-- Form -->
@@ -420,7 +497,7 @@
       <div id="formMessage" class="message"></div>
 
       <!-- IMPORTANTE: Cambia action por tu URL de Formspree (gratis en formspree.io) -->
-      <form id="lotteryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form id="lotteryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data">
         <div class="form-group">
           <label for="nombre">Nombre completo *</label>
           <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
@@ -438,8 +515,9 @@
           <input type="url" id="enlace" name="enlace_reseña" placeholder="https://g.page/...">
         </div>
         <div class="form-group">
-          <label for="screenshot">URL de tu captura (sube a Imgur/Drive y pega el enlace)</label>
-          <input type="url" id="screenshot" name="screenshot" placeholder="https://i.imgur.com/...">
+          <label for="screenshot">📸 Captura de tu reseña *</label>
+          <input type="file" id="screenshot" name="screenshot" accept="image/*" capture="environment" required>
+          <p style="font-size: 0.75rem; color: #888; margin-top: 6px;">Toca para tomar foto o seleccionar desde tu galería</p>
         </div>
         <div class="form-group">
           <label for="comentario">Comentario adicional</label>
@@ -520,17 +598,14 @@
       btn.disabled = true;
       btn.textContent = 'Enviando...';
 
-      const formData = {
-        nombre: document.getElementById('nombre').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        telefono: document.getElementById('telefono').value.trim(),
-        enlace_reseña: document.getElementById('enlace').value.trim(),
-        screenshot: document.getElementById('screenshot').value.trim(),
-        comentario: document.getElementById('comentario').value.trim(),
-        fecha: new Date().toLocaleString('es-ES')
-      };
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const enlace_reseña = document.getElementById('enlace').value.trim();
+      const screenshotFile = document.getElementById('screenshot').files[0];
+      const comentario = document.getElementById('comentario').value.trim();
 
-      if (!formData.nombre || !formData.email || !formData.telefono) {
+      if (!nombre || !email || !telefono || !screenshotFile) {
         showMessage('Por favor completa todos los campos obligatorios (*).', 'error');
         btn.disabled = false;
         btn.textContent = '¡Participar en la Lotería!';
@@ -539,7 +614,7 @@
 
       // Save locally
       const participants = JSON.parse(localStorage.getItem('igsm_lottery') || '[]');
-      const exists = participants.find(p => p.email.toLowerCase() === formData.email.toLowerCase());
+      const exists = participants.find(p => p.email.toLowerCase() === email.toLowerCase());
       if (exists) {
         showMessage('Este email ya está registrado. ¡Mucha suerte! 🍀', 'error');
         btn.disabled = false;
@@ -547,11 +622,21 @@
         return;
       }
 
+      const formData = {
+        nombre: nombre,
+        email: email,
+        telefono: telefono,
+        enlace_reseña: enlace_reseña,
+        screenshot_name: screenshotFile.name,
+        comentario: comentario,
+        fecha: new Date().toLocaleString('es-ES')
+      };
+
       participants.push(formData);
       localStorage.setItem('igsm_lottery', JSON.stringify(participants));
       updateParticipantCount();
 
-      showMessage('🎉 ¡Registrado! IMPORTANTE: Configura Formspree para recibir datos reales. Los datos se guardaron solo en este navegador.', 'success');
+      showMessage('🎉 ¡Registrado! IMPORTANTE: Configura Formspree para recibir datos y capturas reales. Los datos se guardaron solo en este navegador.', 'success');
       form.reset();
       btn.disabled = false;
       btn.textContent = '¡Participar en la Lotería!';
