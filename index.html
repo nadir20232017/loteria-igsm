@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 Lotería IGSM - Reseña y Gana</title>
+<style>
+  :root {
+    --gold: #FFD700;
+    --gold-dark: #D4AF37;
+    --blue: #1a237e;
+    --blue-light: #3949ab;
+    --white: #ffffff;
+    --gray: #f5f5f5;
+    --shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+    min-height: 100vh;
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  .header h1 {
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 8px;
+  }
+
+  .header .brand {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Ticket card */
+  .ticket {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 28px;
+    color: #333;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ticket::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .ticket-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--blue);
+    font-weight: bold;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .ticket h2 {
+    color: var(--blue);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  .ticket p.subtitle {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  /* Stars */
+  .stars {
+    font-size: 2rem;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin: 12px 0;
+    text-align: center;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .countdown-item {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+    color: var(--white);
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 70px;
+  }
+
+  .countdown-item .num {
+    font-size: 1.6rem;
+    font-weight: bold;
+    display: block;
+  }
+
+  .countdown-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  /* Steps */
+  .steps {
+    margin: 24px 0;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 14px;
+    background: var(--gray);
+    border-radius: 14px;
+  }
+
+  .step-num {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--blue);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    font-size: 1rem;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .step-content a {
+    color: var(--blue-light);
+    font-weight: 600;
+  }
+
+  /* Prize box */
+  .prize-box {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,215,0,0.05) 100%);
+    border: 2px dashed var(--gold);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .prize-box h3 {
+    color: var(--blue);
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+
+  .prize-box .prize-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--gold-dark);
+  }
+
+  .prize-box .prize-hint {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 6px;
+  }
+
+  /* Form */
+  .form-section {
+    margin-top: 28px;
+  }
+
+  .form-section h3 {
+    color: var(--blue);
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--blue-light);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    color: var(--blue);
+    border: none;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,215,0,0.4);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Messages */
+  .message {
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    display: none;
+  }
+
+  .message.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    display: block;
+  }
+
+  .message.error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+    display: block;
+  }
+
+  /* Participants count */
+  .participants {
+    text-align: center;
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--gray);
+    border-radius: 12px;
+  }
+
+  .participants .count {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--blue);
+  }
+
+  .participants .label {
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* Confetti animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    .header h1 { font-size: 1.8rem; }
+    .countdown-item { min-width: 60px; padding: 10px 12px; }
+    .countdown-item .num { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="brand">IGSM</div>
+    <h1 class="float">🎉 ¡Lotería!</h1>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-badge">Sorteo 1 de Enero</div>
+    <h2>¿Tuviste una buena experiencia?</h2>
+    <p class="subtitle">Déjanos tu reseña de ⭐⭐⭐⭐⭐ en Google y participa</p>
+
+    <div class="stars">★★★★★</div>
+
+    <!-- Countdown -->
+    <div class="countdown" id="countdown">
+      <div class="countdown-item">
+        <span class="num" id="days">00</span>
+        <span class="label">Días</span>
+      </div>
+      <div class="countdown-item">
+        <span class="num" id="hours">00</span>
+        <span class="label">Horas</span>
+      </div>
+      <div class="countdown-item">
+        <span class="num" id="minutes">00</span>
+        <span class="label">Min</span>
+      </div>
+      <div class="countdown-item">
+        <span class="num" id="seconds">00</span>
+        <span class="label">Seg</span>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Busca IGSM en Google</h3>
+          <p>Abre Google y busca <strong>"IGSM"</strong>, o haz clic <a href="https://www.google.com/search?q=igsm&si=APenkKnzv9m99ToiohAuzpadUwbOz34nZJ3j2Ukmo5XOUYWAppTgVuQv3Hr6yzyS5WK5bu7Kh1c6PRgRH4fQuzhqqdeI-V75mcvgyc3mY7YTZUpgZaoMcPI%3D" target="_blank">aquí para ir directo</a>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Deja tu reseña de 5 estrellas</h3>
+          <p>Toca las 5 estrellas ⭐ y escribe un comentario breve sobre tu experiencia.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Captura tu reseña</h3>
+          <p>Toma una captura de pantalla (screenshot) de tu reseña publicada.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Completa el formulario</h3>
+          <p>Sube tu captura y tus datos. ¡Ya estás participando!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prize -->
+    <div class="prize-box">
+      <h3>🏆 Premio</h3>
+      <div class="prize-text">¡Sorpresa Especial!</div>
+      <div class="prize-hint">El premio será anunciado pronto. ¡No te lo pierdas!</div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-section">
+      <h3>📝 Registra tu participación</h3>
+      <div id="formMessage" class="message"></div>
+
+      <!-- IMPORTANTE: Cambia action por tu URL de Formspree (gratis en formspree.io) -->
+      <form id="lotteryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-group">
+          <label for="nombre">Nombre completo *</label>
+          <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label for="email">Correo electrónico *</label>
+          <input type="email" id="email" name="email" required placeholder="tu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono (WhatsApp) *</label>
+          <input type="tel" id="telefono" name="telefono" required placeholder="+34 612 345 678">
+        </div>
+        <div class="form-group">
+          <label for="enlace">Enlace de tu reseña en Google (opcional)</label>
+          <input type="url" id="enlace" name="enlace_reseña" placeholder="https://g.page/...">
+        </div>
+        <div class="form-group">
+          <label for="screenshot">URL de tu captura (sube a Imgur/Drive y pega el enlace)</label>
+          <input type="url" id="screenshot" name="screenshot" placeholder="https://i.imgur.com/...">
+        </div>
+        <div class="form-group">
+          <label for="comentario">Comentario adicional</label>
+          <textarea id="comentario" name="comentario" rows="2" placeholder="Opcional..."></textarea>
+        </div>
+
+        <!-- Campo oculto para identificar el origen -->
+        <input type="hidden" name="_subject" value="🎉 Nueva participación en Lotería IGSM">
+        <input type="hidden" name="_template" value="table">
+
+        <button type="submit" class="btn" id="submitBtn">¡Participar en la Lotería!</button>
+      </form>
+    </div>
+
+    <!-- Participants -->
+    <div class="participants">
+      <div class="count" id="participantCount">0</div>
+      <div class="label">participantes registrados</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© IGSM - Lotería de Reseñas 2025</p>
+    <p>Bases del sorteo disponibles bajo solicitud</p>
+  </div>
+</div>
+
+<script>
+  // Countdown to January 1st of next year
+  function updateCountdown() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    let targetYear = currentYear;
+
+    const target = new Date(targetYear, 0, 1, 0, 0, 0);
+    if (now > target && !(now.getMonth() === 0 && now.getDate() === 1)) {
+      targetYear = currentYear + 1;
+    }
+
+    const targetDate = new Date(targetYear, 0, 1, 0, 0, 0);
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.getElementById('days').textContent = '00';
+      document.getElementById('hours').textContent = '00';
+      document.getElementById('minutes').textContent = '00';
+      document.getElementById('seconds').textContent = '00';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Form handling with Formspree
+  const form = document.getElementById('lotteryForm');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('formMessage');
+
+  // Check if Formspree URL has been configured
+  const FORMSPREE_URL = form.getAttribute('action');
+  const isConfigured = !FORMSPREE_URL.includes('YOUR_FORM_ID');
+
+  if (!isConfigured) {
+    // Demo mode: save locally and show instructions
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      const formData = {
+        nombre: document.getElementById('nombre').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefono: document.getElementById('telefono').value.trim(),
+        enlace_reseña: document.getElementById('enlace').value.trim(),
+        screenshot: document.getElementById('screenshot').value.trim(),
+        comentario: document.getElementById('comentario').value.trim(),
+        fecha: new Date().toLocaleString('es-ES')
+      };
+
+      if (!formData.nombre || !formData.email || !formData.telefono) {
+        showMessage('Por favor completa todos los campos obligatorios (*).', 'error');
+        btn.disabled = false;
+        btn.textContent = '¡Participar en la Lotería!';
+        return;
+      }
+
+      // Save locally
+      const participants = JSON.parse(localStorage.getItem('igsm_lottery') || '[]');
+      const exists = participants.find(p => p.email.toLowerCase() === formData.email.toLowerCase());
+      if (exists) {
+        showMessage('Este email ya está registrado. ¡Mucha suerte! 🍀', 'error');
+        btn.disabled = false;
+        btn.textContent = '¡Participar en la Lotería!';
+        return;
+      }
+
+      participants.push(formData);
+      localStorage.setItem('igsm_lottery', JSON.stringify(participants));
+      updateParticipantCount();
+
+      showMessage('🎉 ¡Registrado! IMPORTANTE: Configura Formspree para recibir datos reales. Los datos se guardaron solo en este navegador.', 'success');
+      form.reset();
+      btn.disabled = false;
+      btn.textContent = '¡Participar en la Lotería!';
+    });
+  } else {
+    // Real Formspree mode
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(FORMSPREE_URL, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          showMessage('🎉 ¡Registro exitoso! Has quedado participando en la lotería. ¡Mucha suerte! 🍀', 'success');
+          form.reset();
+        } else {
+          const data = await response.json();
+          if (data.errors) {
+            showMessage('Error: ' + data.errors.map(e => e.message).join(', '), 'error');
+          } else {
+            showMessage('Hubo un error al enviar. Intenta de nuevo.', 'error');
+          }
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Verifica tu internet e intenta de nuevo.', 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '¡Participar en la Lotería!';
+    });
+  }
+
+  function showMessage(text, type) {
+    msg.textContent = text;
+    msg.className = 'message ' + type;
+    // Auto-hide after 8 seconds
+    setTimeout(() => {
+      if (msg.classList.contains(type)) {
+        msg.className = 'message';
+      }
+    }, 8000);
+  }
+
+  function updateParticipantCount() {
+    const participants = JSON.parse(localStorage.getItem('igsm_lottery') || '[]');
+    document.getElementById('participantCount').textContent = participants.length;
+  }
+
+  // Init
+  updateParticipantCount();
+</script>
+
+</body>
+</html>
